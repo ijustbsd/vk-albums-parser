@@ -71,21 +71,21 @@ def get_likes(owner_id, photo_id):
 def get_comments(owner_id, photo_id):
 	comments = vk.photos.getComments(owner_id=-owner_id, photo_id=photo_id, count=100)
 	comments_count = int(comments['count'])
-	items = {}
+	items = []
 	if int(comments_count) < 101:
 		for i in range(int(comments_count)):
-			items[i] = {
+			items.append({
 				'user': 'https://vk.com/id' + str(comments['items'][i]['from_id']),
 				'text': comments['items'][i]['text']
-			}
+			})
 	else:
 		offset = 0
 		while int(comments_count) > offset:
 			for i in range(min(100, int(comments_count) - offset)):
-				items[i] = {
+				items.append({
 					'user': 'https://vk.com/id' + str(comments['items'][i]['from_id']),
 					'text': comments['items'][i]['text']
-				}
+				})
 			offset += 100
 			comments = vk.photos.getComments(owner_id=-owner_id, photo_id=photo_id, offset=offset, count=100)
 	return {'count': comments_count, 'items': items}
