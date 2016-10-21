@@ -96,18 +96,18 @@ def main():
 	vk = authorization()
 	album_id, owner_id = choose_album()
 	photos_ids, photos_src = get_photos_data(album_id, owner_id)
-	result = {}
+	result = []
 	for i in range(len(photos_ids)):
 		url = get_url(owner_id, photos_ids[i])
 		src = photos_src[i]
 		likes = get_likes(owner_id, photos_ids[i]) if LIKES else {}
 		comments = get_comments(owner_id, photos_ids[i])
-		result[i] = {
+		result.append({
 			'url': url,
 			'src': src,
 			'likes': likes,
 			'comments': comments
-		}
+		})
 		sys.stdout.write('\rФото обработано: %i из %i' % (i + 1, len(photos_ids)))
 	file = open('photos.json', 'w', encoding='utf8')
 	json.dump(result, file, ensure_ascii=False, indent=4)
